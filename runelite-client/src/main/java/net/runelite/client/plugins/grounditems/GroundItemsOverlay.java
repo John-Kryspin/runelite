@@ -37,13 +37,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
-import net.runelite.api.Client;
-import net.runelite.api.Perspective;
-import net.runelite.api.Player;
-import net.runelite.api.Point;
+
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import static net.runelite.client.plugins.grounditems.config.ItemHighlightMode.MENU;
+
+import net.runelite.client.plugins.grounditems.config.PriceDisplayHAProfit;
 import net.runelite.client.plugins.grounditems.config.PriceDisplayMode;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -192,7 +192,7 @@ public class GroundItemsOverlay extends Overlay
 				}
 			}
 
-			final Color color = plugin.getItemColor(highlighted, hidden);
+			Color color = plugin.getItemColor(highlighted, hidden);
 
 			if (config.highlightTiles())
 			{
@@ -254,6 +254,16 @@ public class GroundItemsOverlay extends Overlay
 						.append(StackFormatter.quantityToStackSize(price))
 						.append(" gp)");
 				}
+			}
+			if (config.PriceDisplayHAProfit() == PriceDisplayHAProfit.ON){
+                   final int price = item.getHaPrice()/item.getQuantity() - (client.getItemDefinition(561).getPrice() + client.getItemDefinition(554).getPrice());
+
+					itemStringBuilder.append(" (HAP: ")
+							.append(price)
+							.append(" gp)");
+					if(price >0){
+					    color = Color.GREEN;
+                    }
 			}
 
 			final String itemString = itemStringBuilder.toString();
